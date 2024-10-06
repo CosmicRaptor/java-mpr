@@ -80,7 +80,7 @@ public class DashboardPage {
         cardsInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Cards Information option selected.", "Cards Info", JOptionPane.INFORMATION_MESSAGE);
+                DebitCardInfoPage.main(null);
             }
         });
 

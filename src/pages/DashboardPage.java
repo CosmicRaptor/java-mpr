@@ -73,7 +73,7 @@ public class DashboardPage {
         transferButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Transfer Money option selected.", "Transfer", JOptionPane.INFORMATION_MESSAGE);
+                TransferMoneyPage.main(null);
             }
         });
 

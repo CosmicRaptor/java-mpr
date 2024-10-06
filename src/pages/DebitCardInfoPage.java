@@ -62,19 +62,12 @@ public class DebitCardInfoPage extends JFrame {
                 JOptionPane.showMessageDialog(null, "Card Enabled!");
             }
         });
-        
+
         // ActionListener for the "Set Spending Limit" button
-        setLimitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open a new dialog to set the spending limit
-                String newLimit = JOptionPane.showInputDialog(null, "Enter Spending Limit ($):", "Set Spending Limit", JOptionPane.PLAIN_MESSAGE);
-                
-                // If a valid limit is entered, update the spending limit label
-                if (newLimit != null && !newLimit.isEmpty()) {
-                    spendingLimitValue.setText("$" + newLimit);
-                }
-            }
+        setLimitButton.addActionListener(e -> {
+            // Open the Set Spending Limit Page
+            SetSpendingLimitPage setSpendingLimitPage = new SetSpendingLimitPage(this);
+            setSpendingLimitPage.setVisible(true);
         });
 
         // Add components to the panel
@@ -95,6 +88,11 @@ public class DebitCardInfoPage extends JFrame {
 
         // Add the panel to the frame
         add(panel);
+    }
+
+    // Method to update spending limit
+    public void updateSpendingLimit(String newLimit) {
+        spendingLimitValue.setText(newLimit);
     }
 
     public static void main(String[] args) {

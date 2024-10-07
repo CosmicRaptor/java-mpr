@@ -94,7 +94,8 @@ public class DashboardPage {
         statementButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "View Statement option selected.", "Statement", JOptionPane.INFORMATION_MESSAGE);
+                TransactionHistoryPage.main(null);
+                // JOptionPane.showMessageDialog(frame, "View Statement option selected.", "Statement", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

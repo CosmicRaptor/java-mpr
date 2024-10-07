@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class LoginPage {
             node[0] = mapper.readValue(new File("userinfo.json"), Map.class);
         } catch (IOException e) {
             e.printStackTrace();
-            node[0] = Map.of();  // Assign an empty immutable map
+            node[0] = Map.of(); // Assign an empty immutable map
             JOptionPane.showMessageDialog(frame, "Error reading user info file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -68,14 +70,21 @@ public class LoginPage {
                     if (storedPassword.equals(password)) {
                         JOptionPane.showMessageDialog(frame, "Login Successful!");
                         UsernameData.username = username;
-                        UsernameData.userInfo = userInfo;
+                        System.out.println(userInfo);
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        JsonNode userInfoNode = objectMapper.convertValue(userInfo, JsonNode.class);
+
+                        // Store it in UsernameData
+                        UsernameData.userInfo = userInfoNode;
                         frame.dispose();
                         DashboardPage.main(null);
                     } else {
-                        JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

@@ -1,4 +1,7 @@
 import javax.swing.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +70,9 @@ public class DashboardPage {
         balanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Balance: $10,000", "Balance Information", JOptionPane.INFORMATION_MESSAGE);
+                JsonNode userInfo = UsernameData.userInfo;
+                String balance = userInfo.get("accounts").get(0).get("balance").asText();
+                JOptionPane.showMessageDialog(frame, "Balance: " + balance, "Balance Information", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

@@ -1,6 +1,6 @@
-import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class UsernameData {
     public static String username;
-    public static Map<String, Object> userInfo;
+    public static JsonNode userInfo;
 }

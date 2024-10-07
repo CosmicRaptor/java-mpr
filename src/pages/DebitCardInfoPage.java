@@ -1,73 +1,103 @@
 import javax.swing.*;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class DebitCardInfoPage extends JFrame {
 
-    private JLabel spendingLimitValue;
+    private JLabel cardNumberValue, cardHolderValue, expiryDateValue, cvvValue, balanceValue, spendingLimitValue;
+    private JComboBox<String> cardDropdown;
+
+    private Account[] accounts;
 
     // Constructor to set up the UI
     public DebitCardInfoPage() {
+        // Initialize accounts array based on data from UsernameData
+        JsonNode userAccounts = UsernameData.userInfo.get("accounts");
+        accounts = new Account[userAccounts.size()];
+
+        for (int i = 0; i < userAccounts.size(); i++) {
+            JsonNode accountNode = (JsonNode)userAccounts.get(i);
+            JsonNode debitCardNode = accountNode.get("debitCard");
+
+            accounts[i] = new Account(
+                    accountNode.get("name").asText(),
+                    accountNode.get("balance").asDouble(),
+                    accountNode.get("type").asText(),
+                    new DebitCard(
+                            debitCardNode.get("cardNumber").asText(),
+                            debitCardNode.get("cardHolder").asText(),
+                            debitCardNode.get("expiryDate").asText(),
+                            debitCardNode.get("cvv").asText(),
+                            debitCardNode.get("spendingLimit").get("onlineLimit").asDouble(),
+                            debitCardNode.get("spendingLimit").get("merchantLimit").asDouble(),
+                            debitCardNode.get("spendingLimit").get("atmLimit").asDouble(),
+                            debitCardNode.get("spendingLimit").get("internationalLimit").asDouble(),
+                            debitCardNode.get("disabled").asBoolean()));
+        }
         setTitle("Bank Management System - Debit Card Info");
-        setSize(400, 350);
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the frame
 
         // Creating a panel for the form
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 2, 10, 10)); // 7 rows, 2 columns, with spacing
+        panel.setLayout(new GridLayout(9, 2, 10, 10)); // Updated for additional dropdown
 
-        // Card details as temporary text values
-        String cardNumber = "1234 5678 9012 3456";
-        String cardHolder = "John Doe";
-        String expiryDate = "12/25";
-        String cvv = "*";
-        String balance = "$1,200.50";
-        String spendingLimit = "No Limit";  // Default spending limit text
+        // Dropdown for selecting which card
+        JLabel cardSelectLabel = new JLabel("Select Account:");
+        cardDropdown = new JComboBox<>();
+        for (Account account : accounts) {
+            cardDropdown.addItem(account.name);
+        }
+        cardDropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateCardDetails(cardDropdown.getSelectedIndex());
+            }
+        });
 
         // Adding labels to display card details
         JLabel cardNumberLabel = new JLabel("Card Number:");
-        JLabel cardNumberValue = new JLabel(cardNumber);
+        cardNumberValue = new JLabel();
 
         JLabel cardHolderLabel = new JLabel("Cardholder's Name:");
-        JLabel cardHolderValue = new JLabel(cardHolder);
+        cardHolderValue = new JLabel();
 
         JLabel expiryDateLabel = new JLabel("Expiry Date:");
-        JLabel expiryDateValue = new JLabel(expiryDate);
+        expiryDateValue = new JLabel();
 
         JLabel cvvLabel = new JLabel("CVV:");
-        JLabel cvvValue = new JLabel(cvv);
+        cvvValue = new JLabel();
 
         JLabel balanceLabel = new JLabel("Available Balance:");
-        JLabel balanceValue = new JLabel(balance);
+        balanceValue = new JLabel();
 
-        // Spending limit
         JLabel spendingLimitLabel = new JLabel("Spending Limit:");
-        spendingLimitValue = new JLabel(spendingLimit);
+        spendingLimitValue = new JLabel();
 
         // Add a "Disable Card" checkbox
         JCheckBox disableCardCheckbox = new JCheckBox("Disable Card");
-
-        // Add a "Set Spending Limit" button
-        JButton setLimitButton = new JButton("Set Spending Limit");
-
-        // ActionListener for the "Disable Card" checkbox
         disableCardCheckbox.addActionListener(e -> {
             if (disableCardCheckbox.isSelected()) {
-                // Simulate card being disabled
                 JOptionPane.showMessageDialog(null, "Card Disabled!");
             } else {
-                // Simulate card being re-enabled
                 JOptionPane.showMessageDialog(null, "Card Enabled!");
             }
         });
 
-        // ActionListener for the "Set Spending Limit" button
+        // Add a "Set Spending Limit" button
+        JButton setLimitButton = new JButton("Set Spending Limit");
         setLimitButton.addActionListener(e -> {
-            // Open the Set Spending Limit Page
             SetSpendingLimitPage setSpendingLimitPage = new SetSpendingLimitPage();
             setSpendingLimitPage.setVisible(true);
         });
 
         // Add components to the panel
+        panel.add(cardSelectLabel);
+        panel.add(cardDropdown);
         panel.add(cardNumberLabel);
         panel.add(cardNumberValue);
         panel.add(cardHolderLabel);
@@ -78,18 +108,75 @@ public class DebitCardInfoPage extends JFrame {
         panel.add(cvvValue);
         panel.add(balanceLabel);
         panel.add(balanceValue);
-        panel.add(spendingLimitLabel);
-        panel.add(spendingLimitValue);
-        panel.add(disableCardCheckbox); // Adding the disable card checkbox
-        panel.add(setLimitButton); // Adding the set spending limit button
+        // panel.add(spendingLimitLabel);
+        // panel.add(spendingLimitValue);
+        panel.add(disableCardCheckbox);
+        panel.add(setLimitButton);
 
         // Add the panel to the frame
         add(panel);
+
+        // Set initial card details to the first account
+        updateCardDetails(0);
+    }
+
+    // Method to update card details based on selected index
+    private void updateCardDetails(int index) {
+        Account selectedAccount = accounts[index];
+        DebitCard card = selectedAccount.debitCard;
+
+        cardNumberValue.setText(card.cardNumber);
+        cardHolderValue.setText(card.cardHolder);
+        expiryDateValue.setText(card.expiryDate);
+        cvvValue.setText(card.cvv);
+        balanceValue.setText("$" + selectedAccount.balance);
+        spendingLimitValue.setText("Online: " + card.onlineLimit + ", Merchant: " + card.merchantLimit +
+                ", ATM: " + card.atmLimit + ", Intl: " + card.internationalLimit);
     }
 
     public static void main(String[] args) {
         // Create and display the Debit Card Info Page
         DebitCardInfoPage debitCardPage = new DebitCardInfoPage();
         debitCardPage.setVisible(true);
+    }
+
+    // Dummy classes to simulate the data structure
+    static class Account {
+        String name;
+        double balance;
+        String type;
+        DebitCard debitCard;
+
+        Account(String name, double balance, String type, DebitCard debitCard) {
+            this.name = name;
+            this.balance = balance;
+            this.type = type;
+            this.debitCard = debitCard;
+        }
+    }
+
+    static class DebitCard {
+        String cardNumber;
+        String cardHolder;
+        String expiryDate;
+        String cvv;
+        double onlineLimit;
+        double merchantLimit;
+        double atmLimit;
+        double internationalLimit;
+        boolean disabled;
+
+        DebitCard(String cardNumber, String cardHolder, String expiryDate, String cvv, double onlineLimit,
+                double merchantLimit, double atmLimit, double internationalLimit, boolean disabled) {
+            this.cardNumber = cardNumber;
+            this.cardHolder = cardHolder;
+            this.expiryDate = expiryDate;
+            this.cvv = cvv;
+            this.onlineLimit = onlineLimit;
+            this.merchantLimit = merchantLimit;
+            this.atmLimit = atmLimit;
+            this.internationalLimit = internationalLimit;
+            this.disabled = disabled;
+        }
     }
 }

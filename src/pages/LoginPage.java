@@ -2,10 +2,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class LoginPage {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Login Page");
+        ObjectMapper mapper = new ObjectMapper();
+        final Map<String, Object>[] node = new Map[1];
+
+        try {
+            node[0] = mapper.readValue(new File("userinfo.json"), Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            node[0] = Map.of();  // Assign an empty immutable map
+            JOptionPane.showMessageDialog(frame, "Error reading user info file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
         frame.setLayout(new GridBagLayout());
@@ -47,10 +62,18 @@ public class LoginPage {
                 String username = userText.getText();
                 String password = String.valueOf(passwordText.getPassword());
 
-                if ("user".equals(username) && "password".equals(password)) {
-                    JOptionPane.showMessageDialog(frame, "Login Successful!");
-                    frame.dispose();
-                    DashboardPage.main(null, username);
+                if (node[0].containsKey(username)) {
+                    Map<String, Object> userInfo = (Map<String, Object>) node[0].get(username);
+                    String storedPassword = (String) userInfo.get("password");
+                    if (storedPassword.equals(password)) {
+                        JOptionPane.showMessageDialog(frame, "Login Successful!");
+                        UsernameData.username = username;
+                        UsernameData.userInfo = userInfo;
+                        frame.dispose();
+                        DashboardPage.main(null);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
                 }

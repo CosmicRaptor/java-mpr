@@ -4,7 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DashboardPage {
-    public static void main(String[] args, String username) {
+    public static void main(String[] args) {
+        String username = UsernameData.username;
         JFrame frame = new JFrame("Dashboard");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);

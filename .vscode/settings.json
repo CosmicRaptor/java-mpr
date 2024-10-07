@@ -1,0 +1,13 @@
+{
+    "java.project.sourcePaths": [
+        "src",
+        "src/pages",
+        "src/singletons"
+    ],
+    "java.project.referencedLibraries": [
+        "/home/aryan/Documents/java mpr/jackson-annotations-2.18.0.jar",
+        "/home/aryan/Documents/java mpr/jackson-databind-2.18.0.jar",
+        "/home/aryan/Documents/java mpr/jackson-core-2.18.0.jar"
+    ],
+    "java.search.scope": "all"
+}

@@ -1,7 +1,7 @@
 {
-    "username": {
+    "user": {
         "name": "username",
-        "password": "hashed_password_here",
+        "password": "1234",
         "accounts": [
             {
                 "name": "account1",

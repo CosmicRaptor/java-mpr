@@ -1,8 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 public class DebitCardInfoPage extends JFrame {
 
     private JLabel spendingLimitValue;
@@ -66,7 +63,7 @@ public class DebitCardInfoPage extends JFrame {
         // ActionListener for the "Set Spending Limit" button
         setLimitButton.addActionListener(e -> {
             // Open the Set Spending Limit Page
-            SetSpendingLimitPage setSpendingLimitPage = new SetSpendingLimitPage(this);
+            SetSpendingLimitPage setSpendingLimitPage = new SetSpendingLimitPage();
             setSpendingLimitPage.setVisible(true);
         });
 
@@ -88,11 +85,6 @@ public class DebitCardInfoPage extends JFrame {
 
         // Add the panel to the frame
         add(panel);
-    }
-
-    // Method to update spending limit
-    public void updateSpendingLimit(String newLimit) {
-        spendingLimitValue.setText(newLimit);
     }
 
     public static void main(String[] args) {

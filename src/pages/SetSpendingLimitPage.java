@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SetSpendingLimitPage extends JFrame {
 
@@ -15,11 +13,8 @@ public class SetSpendingLimitPage extends JFrame {
     private JCheckBox merchantTransactionLimitCheckbox;
     private JCheckBox internationalLimitCheckbox;
 
-    private DebitCardInfoPage parentPage;
-
     // Constructor to set up the UI
-    public SetSpendingLimitPage(DebitCardInfoPage parentPage) {
-        this.parentPage = parentPage; // Store reference to the parent page
+    public SetSpendingLimitPage() {
 
         setTitle("Set Spending Limits");
         setSize(400, 300);
@@ -90,7 +85,7 @@ public class SetSpendingLimitPage extends JFrame {
             // Display the selected limits
             if (limitText.length() > 12) {  // Check if any limit is set (length > initial "Limits Set: \n")
                 JOptionPane.showMessageDialog(null, limitText.toString());
-                parentPage.updateSpendingLimit(limitText.toString()); // Update spending limit in the parent page
+                // parentPage.updateSpendingLimit(limitText.toString()); // Update spending limit in the parent page
                 dispose(); // Close the window after confirming
             } else {
                 JOptionPane.showMessageDialog(null, "No limits were set. Please select at least one limit.");

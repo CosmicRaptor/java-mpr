@@ -87,7 +87,8 @@ public class DashboardPage {
         fixedDepositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Fixed Deposit option selected.", "Fixed Deposit", JOptionPane.INFORMATION_MESSAGE);
+                FixedDepositHistoryPage.main(null);
+                // JOptionPane.showMessageDialog(frame, "Fixed Deposit option selected.", "Fixed Deposit", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

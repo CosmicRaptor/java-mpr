@@ -10,10 +10,10 @@ public class SetSpendingLimitPage extends JFrame {
     private JTextField monthlyLimitField;
     private JTextField transactionLimitField;
 
-    private JCheckBox dailyLimitCheckbox;
-    private JCheckBox weeklyLimitCheckbox;
-    private JCheckBox monthlyLimitCheckbox;
-    private JCheckBox transactionLimitCheckbox;
+    private JCheckBox atmWithdrawlLimitCheckbox;
+    private JCheckBox onlineTransactionLimitCheckbox;
+    private JCheckBox merchantTransactionLimitCheckbox;
+    private JCheckBox internationalLimitCheckbox;
 
     private DebitCardInfoPage parentPage;
 
@@ -31,21 +31,21 @@ public class SetSpendingLimitPage extends JFrame {
         panel.setLayout(new GridLayout(5, 3, 10, 10)); // 5 rows, 3 columns, with spacing
 
         // Limit labels and input fields
-        JLabel dailyLimitLabel = new JLabel("Daily Limit ($):");
+        JLabel dailyLimitLabel = new JLabel("ATM Limit ($):");
         dailyLimitField = new JTextField();
-        dailyLimitCheckbox = new JCheckBox("Apply");
+        atmWithdrawlLimitCheckbox = new JCheckBox("Apply");
 
-        JLabel weeklyLimitLabel = new JLabel("Weekly Limit ($):");
+        JLabel weeklyLimitLabel = new JLabel("Online transaction Limit :");
         weeklyLimitField = new JTextField();
-        weeklyLimitCheckbox = new JCheckBox("Apply");
+        onlineTransactionLimitCheckbox = new JCheckBox("Apply");
 
-        JLabel monthlyLimitLabel = new JLabel("Monthly Limit ($):");
+        JLabel monthlyLimitLabel = new JLabel("Merchant Limit :");
         monthlyLimitField = new JTextField();
-        monthlyLimitCheckbox = new JCheckBox("Apply");
+        merchantTransactionLimitCheckbox = new JCheckBox("Apply");
 
-        JLabel transactionLimitLabel = new JLabel("Transaction Limit ($):");
+        JLabel transactionLimitLabel = new JLabel("International Limit :");
         transactionLimitField = new JTextField();
-        transactionLimitCheckbox = new JCheckBox("Apply");
+        internationalLimitCheckbox = new JCheckBox("Apply");
 
         // Confirm and Cancel buttons
         JButton confirmButton = new JButton("Confirm");
@@ -56,7 +56,7 @@ public class SetSpendingLimitPage extends JFrame {
             StringBuilder limitText = new StringBuilder("Limits Set: \n");
 
             // Check if daily limit is selected and valid
-            if (dailyLimitCheckbox.isSelected()) {
+            if (atmWithdrawlLimitCheckbox.isSelected()) {
                 String dailyLimit = dailyLimitField.getText();
                 if (!dailyLimit.isEmpty()) {
                     limitText.append("Daily Limit: $").append(dailyLimit).append("\n");
@@ -64,7 +64,7 @@ public class SetSpendingLimitPage extends JFrame {
             }
 
             // Check if weekly limit is selected and valid
-            if (weeklyLimitCheckbox.isSelected()) {
+            if (onlineTransactionLimitCheckbox.isSelected()) {
                 String weeklyLimit = weeklyLimitField.getText();
                 if (!weeklyLimit.isEmpty()) {
                     limitText.append("Weekly Limit: $").append(weeklyLimit).append("\n");
@@ -72,7 +72,7 @@ public class SetSpendingLimitPage extends JFrame {
             }
 
             // Check if monthly limit is selected and valid
-            if (monthlyLimitCheckbox.isSelected()) {
+            if (merchantTransactionLimitCheckbox.isSelected()) {
                 String monthlyLimit = monthlyLimitField.getText();
                 if (!monthlyLimit.isEmpty()) {
                     limitText.append("Monthly Limit: $").append(monthlyLimit).append("\n");
@@ -80,7 +80,7 @@ public class SetSpendingLimitPage extends JFrame {
             }
 
             // Check if transaction limit is selected and valid
-            if (transactionLimitCheckbox.isSelected()) {
+            if (internationalLimitCheckbox.isSelected()) {
                 String transactionLimit = transactionLimitField.getText();
                 if (!transactionLimit.isEmpty()) {
                     limitText.append("Transaction Limit: $").append(transactionLimit).append("\n");
@@ -103,19 +103,19 @@ public class SetSpendingLimitPage extends JFrame {
         // Add components to the panel
         panel.add(dailyLimitLabel);
         panel.add(dailyLimitField);
-        panel.add(dailyLimitCheckbox);
+        panel.add(atmWithdrawlLimitCheckbox);
 
         panel.add(weeklyLimitLabel);
         panel.add(weeklyLimitField);
-        panel.add(weeklyLimitCheckbox);
+        panel.add(onlineTransactionLimitCheckbox);
 
         panel.add(monthlyLimitLabel);
         panel.add(monthlyLimitField);
-        panel.add(monthlyLimitCheckbox);
+        panel.add(merchantTransactionLimitCheckbox);
 
         panel.add(transactionLimitLabel);
         panel.add(transactionLimitField);
-        panel.add(transactionLimitCheckbox);
+        panel.add(internationalLimitCheckbox);
 
         panel.add(confirmButton);
         panel.add(cancelButton);

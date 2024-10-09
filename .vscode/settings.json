@@ -3,7 +3,8 @@
         "src",
         "src/pages",
         "src/singletons",
-        "src/models"
+        "src/models",
+        "src/util"
     ],
     "java.project.referencedLibraries": [
         "/home/aryan/Documents/java mpr/jackson-annotations-2.18.0.jar",

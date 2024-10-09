@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class TransactionHistoryPage extends JFrame {
 
     // Constructor to set up the UI
     public TransactionHistoryPage() {
+        TransactionUtil.setTransactionGlobal();
         setTitle("Bank Management System - Transaction History");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,12 +79,15 @@ public class TransactionHistoryPage extends JFrame {
 
         // Transaction Table
         String[] columnNames = {"Date", "Description", "Type", "Amount", "Balance"};
-        Object[][] data = {
-                {"01/01/2024", "Grocery Shopping", "Debit", "$50.00", "$1,150.50"},
-                {"02/01/2024", "Salary Deposit", "Credit", "$2,000.00", "$3,150.50"},
-                {"03/01/2024", "Electricity Bill", "Debit", "$120.00", "$3,030.50"},
-                {"04/01/2024", "Internet Bill", "Debit", "$40.00", "$2,990.50"},
-        };
+        Object[][] data = new Object[UsernameData.transactions.length][5];
+        for(int i = 0; i < UsernameData.transactions.length; i++){
+            Transaction transaction = UsernameData.transactions[i];
+            data[i][0] = transaction.getTransactionDate(); // Convert to Date for display
+            data[i][1] = transaction.getNotes(); // Replace with actual description if available
+            data[i][2] = transaction.getTransactionType(); // Transaction Type
+            data[i][3] = "$" + transaction.getAmount() + ".00"; // Amount
+            data[i][4] = "$" + transaction.getBalanceAfterTransaction() + ".00"; // Balance After Transaction
+        }
 
         JTable transactionTable = new JTable(data, columnNames);
         JScrollPane tableScrollPane = new JScrollPane(transactionTable);

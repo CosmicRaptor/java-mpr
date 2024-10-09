@@ -100,6 +100,7 @@ public class LoginPage {
                                             debitCardNode.get("disabled").asBoolean()));
                         }
                         UsernameData.accounts = accounts;
+                        TransactionUtil.setTransactionGlobal();
                         frame.dispose();
                         DashboardPage.main(null);
                     } else {

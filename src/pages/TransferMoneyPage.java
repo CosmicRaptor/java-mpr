@@ -103,6 +103,7 @@ public class TransferMoneyPage extends JFrame {
                 String fromAccount = cardDropdown.getSelectedItem().toString();
                 String toAccount = toAccountField.getText();
                 String amount = amountField.getText();
+                String notes = notesField.getText();
 
                 // Simple validation and success message
                 if (toAccount.isEmpty() || amount.isEmpty()) {
@@ -115,7 +116,8 @@ public class TransferMoneyPage extends JFrame {
                         "Transfer",
                         Integer.parseInt(amount),
                         new Date(),
-                        1000
+                        1000,
+                        notes
                     );
                     TransactionUtil.appendTransaction(transaction);
                     JOptionPane.showMessageDialog(TransferMoneyPage.this, "Transfer of $" + amount + " to account " + toAccount + " successful.", "Transfer Successful", JOptionPane.INFORMATION_MESSAGE);

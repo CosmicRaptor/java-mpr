@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionUtil {
-    
+
     private static final String TRANSACTION_FILE = "transactions.json";
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -36,7 +36,8 @@ public class TransactionUtil {
 
             // If file exists, read the existing transactions
             if (file.exists()) {
-                return objectMapper.readValue(file, new TypeReference<List<Transaction>>() {});
+                return objectMapper.readValue(file, new TypeReference<List<Transaction>>() {
+                });
             }
 
             // If file doesn't exist, return a new empty list
@@ -45,6 +46,19 @@ public class TransactionUtil {
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public static void setTransactionGlobal() {
+        File file = new File(TRANSACTION_FILE);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            List<Transaction> tr = objectMapper.readValue(file, new TypeReference<List<Transaction>>() {
+            });
+            UsernameData.transactions = tr.toArray(new Transaction[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

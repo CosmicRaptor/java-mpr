@@ -10,33 +10,9 @@ public class DebitCardInfoPage extends JFrame {
     private JLabel cardNumberValue, cardHolderValue, expiryDateValue, cvvValue, balanceValue, spendingLimitValue;
     private JComboBox<String> cardDropdown;
 
-    private Account[] accounts;
-
     // Constructor to set up the UI
     public DebitCardInfoPage() {
-        // Initialize accounts array based on data from UsernameData
-        JsonNode userAccounts = UsernameData.userInfo.get("accounts");
-        accounts = new Account[userAccounts.size()];
-
-        for (int i = 0; i < userAccounts.size(); i++) {
-            JsonNode accountNode = (JsonNode)userAccounts.get(i);
-            JsonNode debitCardNode = accountNode.get("debitCard");
-
-            accounts[i] = new Account(
-                    accountNode.get("name").asText(),
-                    accountNode.get("balance").asDouble(),
-                    accountNode.get("type").asText(),
-                    new DebitCard(
-                            debitCardNode.get("cardNumber").asText(),
-                            debitCardNode.get("cardHolder").asText(),
-                            debitCardNode.get("expiryDate").asText(),
-                            debitCardNode.get("cvv").asText(),
-                            debitCardNode.get("spendingLimit").get("onlineLimit").asDouble(),
-                            debitCardNode.get("spendingLimit").get("merchantLimit").asDouble(),
-                            debitCardNode.get("spendingLimit").get("atmLimit").asDouble(),
-                            debitCardNode.get("spendingLimit").get("internationalLimit").asDouble(),
-                            debitCardNode.get("disabled").asBoolean()));
-        }
+        
         setTitle("Bank Management System - Debit Card Info");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +25,7 @@ public class DebitCardInfoPage extends JFrame {
         // Dropdown for selecting which card
         JLabel cardSelectLabel = new JLabel("Select Account:");
         cardDropdown = new JComboBox<>();
-        for (Account account : accounts) {
+        for (Account account : UsernameData.accounts) {
             cardDropdown.addItem(account.name);
         }
         cardDropdown.addActionListener(new ActionListener() {
@@ -122,7 +98,7 @@ public class DebitCardInfoPage extends JFrame {
 
     // Method to update card details based on selected index
     private void updateCardDetails(int index) {
-        Account selectedAccount = accounts[index];
+        Account selectedAccount = UsernameData.accounts[index];
         DebitCard card = selectedAccount.debitCard;
 
         cardNumberValue.setText(card.cardNumber);

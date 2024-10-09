@@ -75,6 +75,31 @@ public class LoginPage {
 
                         // Store it in UsernameData
                         UsernameData.userInfo = userInfoNode;
+                        // Initialize accounts array based on data from UsernameData
+                        JsonNode userAccounts = UsernameData.userInfo.get("accounts");
+                        Account[] accounts;
+                        accounts = new Account[userAccounts.size()];
+
+                        for (int i = 0; i < userAccounts.size(); i++) {
+                            JsonNode accountNode = (JsonNode) userAccounts.get(i);
+                            JsonNode debitCardNode = accountNode.get("debitCard");
+
+                            accounts[i] = new Account(
+                                    accountNode.get("name").asText(),
+                                    accountNode.get("balance").asDouble(),
+                                    accountNode.get("type").asText(),
+                                    new DebitCard(
+                                            debitCardNode.get("cardNumber").asText(),
+                                            debitCardNode.get("cardHolder").asText(),
+                                            debitCardNode.get("expiryDate").asText(),
+                                            debitCardNode.get("cvv").asText(),
+                                            debitCardNode.get("spendingLimit").get("onlineLimit").asDouble(),
+                                            debitCardNode.get("spendingLimit").get("merchantLimit").asDouble(),
+                                            debitCardNode.get("spendingLimit").get("atmLimit").asDouble(),
+                                            debitCardNode.get("spendingLimit").get("internationalLimit").asDouble(),
+                                            debitCardNode.get("disabled").asBoolean()));
+                        }
+                        UsernameData.accounts = accounts;
                         frame.dispose();
                         DashboardPage.main(null);
                     } else {

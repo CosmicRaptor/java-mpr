@@ -2,7 +2,8 @@
     "java.project.sourcePaths": [
         "src",
         "src/pages",
-        "src/singletons"
+        "src/singletons",
+        "src/models"
     ],
     "java.project.referencedLibraries": [
         "/home/aryan/Documents/java mpr/jackson-annotations-2.18.0.jar",

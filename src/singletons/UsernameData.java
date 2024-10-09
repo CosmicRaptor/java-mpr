@@ -5,4 +5,5 @@ public class UsernameData {
     public static JsonNode userInfo;
     public static Account[] accounts;
     public static Transaction[] transactions;
+    public static DebitCard selecteDebitCard;
 }

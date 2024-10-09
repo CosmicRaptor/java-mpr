@@ -28,18 +28,22 @@ public class SetSpendingLimitPage extends JFrame {
         // Limit labels and input fields
         JLabel dailyLimitLabel = new JLabel("ATM Limit ($):");
         dailyLimitField = new JTextField();
+        dailyLimitField.setText(String.valueOf(UsernameData.selecteDebitCard.getSpendingLimit().getAtmLimit()));
         atmWithdrawlLimitCheckbox = new JCheckBox("Apply");
 
         JLabel weeklyLimitLabel = new JLabel("Online transaction Limit :");
         weeklyLimitField = new JTextField();
+        weeklyLimitField.setText(String.valueOf(UsernameData.selecteDebitCard.getSpendingLimit().getOnlineLimit()));
         onlineTransactionLimitCheckbox = new JCheckBox("Apply");
 
         JLabel monthlyLimitLabel = new JLabel("Merchant Limit :");
         monthlyLimitField = new JTextField();
+        monthlyLimitField.setText(String.valueOf(UsernameData.selecteDebitCard.getSpendingLimit().getMerchantLimit()));
         merchantTransactionLimitCheckbox = new JCheckBox("Apply");
 
         JLabel transactionLimitLabel = new JLabel("International Limit :");
         transactionLimitField = new JTextField();
+        transactionLimitField.setText(String.valueOf(UsernameData.selecteDebitCard.getSpendingLimit().getInternationalLimit()));
         internationalLimitCheckbox = new JCheckBox("Apply");
 
         // Confirm and Cancel buttons
@@ -48,48 +52,15 @@ public class SetSpendingLimitPage extends JFrame {
 
         // ActionListener for the confirm button
         confirmButton.addActionListener(e -> {
-            StringBuilder limitText = new StringBuilder("Limits Set: \n");
 
-            // Check if daily limit is selected and valid
-            if (atmWithdrawlLimitCheckbox.isSelected()) {
-                String dailyLimit = dailyLimitField.getText();
-                if (!dailyLimit.isEmpty()) {
-                    limitText.append("Daily Limit: $").append(dailyLimit).append("\n");
-                }
-            }
+            Integer atmLimit = atmWithdrawlLimitCheckbox.isSelected() ? Integer.parseInt(dailyLimitField.getText()) : UsernameData.selecteDebitCard.getSpendingLimit().getAtmLimit();
+            Integer onlineLimit = onlineTransactionLimitCheckbox.isSelected() ? Integer.parseInt(weeklyLimitField.getText()) : UsernameData.selecteDebitCard.getSpendingLimit().getOnlineLimit();
+            Integer merchantLimit = merchantTransactionLimitCheckbox.isSelected() ? Integer.parseInt(monthlyLimitField.getText()) : UsernameData.selecteDebitCard.getSpendingLimit().getMerchantLimit();
+            Integer internationalLimit = internationalLimitCheckbox.isSelected() ? Integer.parseInt(transactionLimitField.getText()) : UsernameData.selecteDebitCard.getSpendingLimit().getInternationalLimit();
 
-            // Check if weekly limit is selected and valid
-            if (onlineTransactionLimitCheckbox.isSelected()) {
-                String weeklyLimit = weeklyLimitField.getText();
-                if (!weeklyLimit.isEmpty()) {
-                    limitText.append("Weekly Limit: $").append(weeklyLimit).append("\n");
-                }
-            }
-
-            // Check if monthly limit is selected and valid
-            if (merchantTransactionLimitCheckbox.isSelected()) {
-                String monthlyLimit = monthlyLimitField.getText();
-                if (!monthlyLimit.isEmpty()) {
-                    limitText.append("Monthly Limit: $").append(monthlyLimit).append("\n");
-                }
-            }
-
-            // Check if transaction limit is selected and valid
-            if (internationalLimitCheckbox.isSelected()) {
-                String transactionLimit = transactionLimitField.getText();
-                if (!transactionLimit.isEmpty()) {
-                    limitText.append("Transaction Limit: $").append(transactionLimit).append("\n");
-                }
-            }
-
-            // Display the selected limits
-            if (limitText.length() > 12) {  // Check if any limit is set (length > initial "Limits Set: \n")
-                JOptionPane.showMessageDialog(null, limitText.toString());
-                // parentPage.updateSpendingLimit(limitText.toString()); // Update spending limit in the parent page
-                dispose(); // Close the window after confirming
-            } else {
-                JOptionPane.showMessageDialog(null, "No limits were set. Please select at least one limit.");
-            }
+            DebitCardLimit spendingLimit = new DebitCardLimit(onlineLimit, merchantLimit, atmLimit, internationalLimit);
+            UsernameData.selecteDebitCard.setSpendingLimit(spendingLimit);
+            JOptionPane.showMessageDialog(null, "Spending Limits Updated!");
         });
 
         // ActionListener for the cancel button

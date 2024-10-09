@@ -93,10 +93,11 @@ public class LoginPage {
                                             debitCardNode.get("cardHolder").asText(),
                                             debitCardNode.get("expiryDate").asText(),
                                             debitCardNode.get("cvv").asText(),
-                                            debitCardNode.get("spendingLimit").get("onlineLimit").asDouble(),
-                                            debitCardNode.get("spendingLimit").get("merchantLimit").asDouble(),
-                                            debitCardNode.get("spendingLimit").get("atmLimit").asDouble(),
-                                            debitCardNode.get("spendingLimit").get("internationalLimit").asDouble(),
+                                            new DebitCardLimit(
+                                                debitCardNode.get("spendingLimit").get("onlineLimit").asInt(), 
+                                                debitCardNode.get("spendingLimit").get("merchantLimit").asInt(), 
+                                                debitCardNode.get("spendingLimit").get("atmLimit").asInt(), 
+                                                debitCardNode.get("spendingLimit").get("internationalLimit").asInt()),
                                             debitCardNode.get("disabled").asBoolean()));
                         }
                         UsernameData.accounts = accounts;

@@ -1,6 +1,4 @@
 import javax.swing.*;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,14 +98,15 @@ public class DebitCardInfoPage extends JFrame {
     private void updateCardDetails(int index) {
         Account selectedAccount = UsernameData.accounts[index];
         DebitCard card = selectedAccount.debitCard;
+        UsernameData.selecteDebitCard = card;
 
-        cardNumberValue.setText(card.cardNumber);
-        cardHolderValue.setText(card.cardHolder);
-        expiryDateValue.setText(card.expiryDate);
-        cvvValue.setText(card.cvv);
+        cardNumberValue.setText(card.getCardNumber());
+        cardHolderValue.setText(card.getCardHolder());
+        expiryDateValue.setText(card.getExpiryDate());
+        cvvValue.setText(card.getCvv());
         balanceValue.setText("$" + selectedAccount.balance);
-        spendingLimitValue.setText("Online: " + card.onlineLimit + ", Merchant: " + card.merchantLimit +
-                ", ATM: " + card.atmLimit + ", Intl: " + card.internationalLimit);
+        // spendingLimitValue.setText("Online: " + card.onlineLimit + ", Merchant: " + card.merchantLimit +
+                // ", ATM: " + card.atmLimit + ", Intl: " + card.internationalLimit);
     }
 
     public static void main(String[] args) {

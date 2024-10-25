@@ -2,13 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TransactionHistoryPage extends JFrame {
+    private JTable transactionTable;
+    private JTextField startDateField, endDateField, minAmountField, maxAmountField;
+    private JComboBox<String> transactionTypeComboBox;
+    private List<Transaction> allTransactions; // Original transaction data
 
     // Constructor to set up the UI
     public TransactionHistoryPage() {
         TransactionUtil.setTransactionGlobal();
+        allTransactions = List.of(UsernameData.transactions); // Load original transactions
         setTitle("Bank Management System - Transaction History");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,11 +44,11 @@ public class TransactionHistoryPage extends JFrame {
         filterPanel.add(new JLabel("Date Range:"), gbc);
 
         gbc.gridx = 1;
-        JTextField startDateField = new JTextField("Start Date");
+        startDateField = new JTextField("Start Date (yyyy-MM-dd)");
         filterPanel.add(startDateField, gbc);
 
         gbc.gridx = 2;
-        JTextField endDateField = new JTextField("End Date");
+        endDateField = new JTextField("End Date (yyyy-MM-dd)");
         filterPanel.add(endDateField, gbc);
 
         // Transaction Type Filter
@@ -48,7 +57,7 @@ public class TransactionHistoryPage extends JFrame {
         filterPanel.add(new JLabel("Transaction Type:"), gbc);
 
         gbc.gridx = 1;
-        JComboBox<String> transactionTypeComboBox = new JComboBox<>(new String[]{"All", "Credit", "Debit"});
+        transactionTypeComboBox = new JComboBox<>(new String[]{"All", "Credit", "Debit", "Transfer", "Deposit"});
         filterPanel.add(transactionTypeComboBox, gbc);
 
         // Amount Range Filter
@@ -57,11 +66,11 @@ public class TransactionHistoryPage extends JFrame {
         filterPanel.add(new JLabel("Amount Range:"), gbc);
 
         gbc.gridx = 1;
-        JTextField minAmountField = new JTextField("Min Amount");
+        minAmountField = new JTextField("Min Amount");
         filterPanel.add(minAmountField, gbc);
 
         gbc.gridx = 2;
-        JTextField maxAmountField = new JTextField("Max Amount");
+        maxAmountField = new JTextField("Max Amount");
         filterPanel.add(maxAmountField, gbc);
 
         // Filter and Reset Buttons
@@ -79,17 +88,7 @@ public class TransactionHistoryPage extends JFrame {
 
         // Transaction Table
         String[] columnNames = {"Date", "Description", "Type", "Amount", "Balance"};
-        Object[][] data = new Object[UsernameData.transactions.length][5];
-        for(int i = 0; i < UsernameData.transactions.length; i++){
-            Transaction transaction = UsernameData.transactions[i];
-            data[i][0] = transaction.getTransactionDate(); // Convert to Date for display
-            data[i][1] = transaction.getNotes(); // Replace with actual description if available
-            data[i][2] = transaction.getTransactionType(); // Transaction Type
-            data[i][3] = "$" + transaction.getAmount() + ".00"; // Amount
-            data[i][4] = "$" + transaction.getBalanceAfterTransaction() + ".00"; // Balance After Transaction
-        }
-
-        JTable transactionTable = new JTable(data, columnNames);
+        transactionTable = new JTable(new Object[0][5], columnNames);
         JScrollPane tableScrollPane = new JScrollPane(transactionTable);
         mainPanel.add(tableScrollPane, BorderLayout.SOUTH);
 
@@ -100,22 +99,89 @@ public class TransactionHistoryPage extends JFrame {
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Logic to apply filters to the transaction history
-                JOptionPane.showMessageDialog(null, "Filters Applied! (Logic not implemented)");
+                applyFilters();
             }
         });
 
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Logic to reset all filters to default
-                startDateField.setText("Start Date");
-                endDateField.setText("End Date");
-                transactionTypeComboBox.setSelectedIndex(0);
-                minAmountField.setText("Min Amount");
-                maxAmountField.setText("Max Amount");
+                resetFilters();
             }
         });
+
+        // Load initial data into the table
+        updateTable(allTransactions);
+    }
+
+    // Method to apply filters to the transaction history
+    private void applyFilters() {
+        List<Transaction> filteredTransactions = new ArrayList<>(allTransactions);
+
+        // Filter by date range
+        String startDateStr = startDateField.getText();
+        String endDateStr = endDateField.getText();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date startDate = !startDateStr.equals("Start Date (yyyy-MM-dd)") ? sdf.parse(startDateStr) : null;
+            Date endDate = !endDateStr.equals("End Date (yyyy-MM-dd)") ? sdf.parse(endDateStr) : null;
+
+            if (startDate != null) {
+                filteredTransactions.removeIf(transaction -> transaction.getTransactionDate().before(startDate));
+            }
+            if (endDate != null) {
+                filteredTransactions.removeIf(transaction -> transaction.getTransactionDate().after(endDate));
+            }
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid date format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Filter by transaction type
+        String selectedType = (String) transactionTypeComboBox.getSelectedItem();
+        if (!"All".equals(selectedType)) {
+            filteredTransactions.removeIf(transaction -> !transaction.getTransactionType().equalsIgnoreCase(selectedType));
+        }
+
+        // Filter by amount range
+        try {
+            double minAmount = !minAmountField.getText().equals("Min Amount") ? Double.parseDouble(minAmountField.getText()) : Double.MIN_VALUE;
+            double maxAmount = !maxAmountField.getText().equals("Max Amount") ? Double.parseDouble(maxAmountField.getText()) : Double.MAX_VALUE;
+            filteredTransactions.removeIf(transaction -> transaction.getAmount() < minAmount || transaction.getAmount() > maxAmount);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid amount. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Update the table with the filtered data
+        updateTable(filteredTransactions);
+    }
+
+    // Method to reset filters to default
+    private void resetFilters() {
+        startDateField.setText("Start Date (yyyy-MM-dd)");
+        endDateField.setText("End Date (yyyy-MM-dd)");
+        transactionTypeComboBox.setSelectedIndex(0);
+        minAmountField.setText("Min Amount");
+        maxAmountField.setText("Max Amount");
+        updateTable(allTransactions);
+    }
+
+    // Method to update the table with the filtered transaction data
+    private void updateTable(List<Transaction> transactions) {
+        String[] columnNames = {"Date", "Description", "Type", "Amount", "Balance"};
+        Object[][] data = new Object[transactions.size()][5];
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction transaction = transactions.get(i);
+            data[i][0] = new SimpleDateFormat("yyyy-MM-dd").format(transaction.getTransactionDate());
+            data[i][1] = transaction.getNotes() != null ? transaction.getNotes() : "";
+            data[i][2] = transaction.getTransactionType();
+            data[i][3] = "$" + transaction.getAmount() + ".00";
+            data[i][4] = "$" + transaction.getBalanceAfterTransaction() + ".00";
+        }
+
+        transactionTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
     }
 
     public static void main(String[] args) {

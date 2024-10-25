@@ -7,6 +7,7 @@ import java.util.Date;
 public class TransferMoneyPage extends JFrame {
     Account selectedAccount;
     DebitCard selectedCard;
+    int selectedIndex;
 
     // Constructor to initialize the UI
     public TransferMoneyPage() {
@@ -108,7 +109,12 @@ public class TransferMoneyPage extends JFrame {
                 // Simple validation and success message
                 if (toAccount.isEmpty() || amount.isEmpty()) {
                     JOptionPane.showMessageDialog(TransferMoneyPage.this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
+                }
+                else if(Integer.parseInt(amount) > selectedAccount.balance){
+                    JOptionPane.showMessageDialog(TransferMoneyPage.this, "Insufficient balance!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    UsernameData.accounts[selectedIndex].balance -= Integer.parseInt(amount);
                     Transaction transaction = new Transaction(
                         String.valueOf(System.currentTimeMillis()),
                         fromAccount,
@@ -116,10 +122,11 @@ public class TransferMoneyPage extends JFrame {
                         "Transfer",
                         Integer.parseInt(amount),
                         new Date(),
-                        1000,
+                        UsernameData.accounts[selectedIndex].balance,
                         notes
                     );
                     TransactionUtil.appendTransaction(transaction);
+                    JsonUtils.updateAccountBalance(selectedIndex, UsernameData.accounts[selectedIndex].balance);
                     JOptionPane.showMessageDialog(TransferMoneyPage.this, "Transfer of $" + amount + " to account " + toAccount + " successful.", "Transfer Successful", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -133,6 +140,7 @@ public class TransferMoneyPage extends JFrame {
     private void updateCardDetails(int index) {
         selectedAccount = UsernameData.accounts[index];
         selectedCard = selectedAccount.debitCard;
+        selectedIndex = index;
     }
 
     public static void main(String[] args) {

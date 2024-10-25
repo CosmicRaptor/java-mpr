@@ -5,7 +5,8 @@
   "transactionType" : "Transfer",
   "amount" : 1,
   "transactionDate" : 1728482205384,
-  "balanceAfterTransaction" : 1000
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : null
 }, {
   "transactionId" : "1728482316160",
   "accountName" : "account1",
@@ -13,7 +14,8 @@
   "transactionType" : "Transfer",
   "amount" : 1,
   "transactionDate" : 1728482316160,
-  "balanceAfterTransaction" : 1000
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : null
 }, {
   "transactionId" : "1728482323029",
   "accountName" : "account1",
@@ -21,5 +23,60 @@
   "transactionType" : "Transfer",
   "amount" : 1,
   "transactionDate" : 1728482323029,
-  "balanceAfterTransaction" : 1000
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : null
+}, {
+  "transactionId" : "1729849100536",
+  "accountName" : "account1",
+  "toAccount" : "1234",
+  "transactionType" : "Transfer",
+  "amount" : 1,
+  "transactionDate" : 1729849100536,
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : "test 1"
+}, {
+  "transactionId" : "1729849474812",
+  "accountName" : "account1",
+  "toAccount" : "1234",
+  "transactionType" : "Transfer",
+  "amount" : 1,
+  "transactionDate" : 1729849474812,
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : "test 2"
+}, {
+  "transactionId" : "1729849517312",
+  "accountName" : "account1",
+  "toAccount" : "1234",
+  "transactionType" : "Transfer",
+  "amount" : 1,
+  "transactionDate" : 1729849517312,
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : "test 3"
+}, {
+  "transactionId" : "1729849627923",
+  "accountName" : "account1",
+  "toAccount" : "1234",
+  "transactionType" : "Transfer",
+  "amount" : 1,
+  "transactionDate" : 1729849627923,
+  "balanceAfterTransaction" : 1000.0,
+  "notes" : "test 4"
+}, {
+  "transactionId" : "1729850053677",
+  "accountName" : "account1",
+  "toAccount" : "1234",
+  "transactionType" : "Transfer",
+  "amount" : 1,
+  "transactionDate" : 1729850053677,
+  "balanceAfterTransaction" : 99.0,
+  "notes" : "test 5"
+}, {
+  "transactionId" : "1729850456536",
+  "accountName" : "Deposit",
+  "toAccount" : "account1",
+  "transactionType" : "Deposit",
+  "amount" : 100,
+  "transactionDate" : 1729850456536,
+  "balanceAfterTransaction" : 200.0,
+  "notes" : "test 6"
 } ]

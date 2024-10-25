@@ -67,6 +67,7 @@ public class LoginPage {
                     Map<String, Object> userInfo = (Map<String, Object>) node[0].get(username);
                     String storedPassword = (String) userInfo.get("password");
                     if (storedPassword.equals(password)) {
+                        UsernameData.password = storedPassword;
                         JOptionPane.showMessageDialog(frame, "Login Successful!");
                         UsernameData.username = username;
                         System.out.println(userInfo);

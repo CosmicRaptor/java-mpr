@@ -39,7 +39,7 @@ public class DashboardPage {
         JButton cardsInfoButton = new JButton("Cards Information");
         JButton fixedDepositButton = new JButton("Fixed Deposit");
         JButton statementButton = new JButton("View Statement");
-        JButton logoutButton = new JButton("Logout");
+        JButton addMoneyButton = new JButton("Add money");
 
         // Add buttons below the welcome label
         gbc.gridx = 0;
@@ -64,7 +64,7 @@ public class DashboardPage {
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        frame.add(logoutButton, gbc);
+        frame.add(addMoneyButton, gbc);
 
         // Add action listeners to buttons
         balanceButton.addActionListener(new ActionListener() {
@@ -106,12 +106,10 @@ public class DashboardPage {
             }
         });
 
-        logoutButton.addActionListener(new ActionListener() {
+        addMoneyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Logged out successfully.");
-                frame.dispose();  // Close the dashboard
-                LoginPage.main(null);  // Redirect to the login page
+                DepositMoneyPage.main(null);
             }
         });
 

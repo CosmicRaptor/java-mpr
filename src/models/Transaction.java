@@ -9,7 +9,7 @@ public class Transaction {
     private final String transactionType;
     private final Integer amount;
     private final Date transactionDate;
-    private final Integer balanceAfterTransaction;
+    private final Double balanceAfterTransaction;
     private final String notes;
 
     @JsonCreator
@@ -20,7 +20,7 @@ public class Transaction {
         @JsonProperty("transactionType") String transactionType,
         @JsonProperty("amount") Integer amount,
         @JsonProperty("transactionDate") Date transactionDate,
-        @JsonProperty("balanceAfterTransaction") Integer balanceAfterTransaction,
+        @JsonProperty("balanceAfterTransaction") Double balanceAfterTransaction,
         @JsonProperty("notes") String notes
     ) {
         this.transactionId = transactionId;
@@ -58,7 +58,7 @@ public class Transaction {
         return transactionDate;
     }
 
-    public Integer getBalanceAfterTransaction() {
+    public Double getBalanceAfterTransaction() {
         return balanceAfterTransaction;
     }
 

@@ -16,7 +16,6 @@ public class TransactionUtil {
         try {
             // Read existing transactions from file
             List<Transaction> transactions = readTransactions();
-
             // Add the new transaction
             transactions.add(transaction);
 
